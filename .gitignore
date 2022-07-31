@@ -3,3 +3,4 @@ venv/
 /**/.pytest_cache/
 /tests/allure_reports/
 *.log
+*.idea/*
