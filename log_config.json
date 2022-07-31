@@ -1,0 +1,45 @@
+{
+"version": 1,
+"disable_existing_loggers": true,
+"formatters": {
+   "brew_formatter": {
+    "class": "logging.Formatter",
+    "datefmt": "%m-%d-%Y %I:%M:%S",
+    "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    }
+},
+"handlers": {
+    "console":{
+    "level": "INFO",
+    "class": "logging.StreamHandler",
+    "formatter": "brew_formatter",
+    "stream" : "ext://sys.stdout"
+    },
+    "file_handler": {
+        "level": "DEBUG",
+        "class": "logging.FileHandler",
+        "formatter": "brew_formatter",
+        "filename": "../../test_log.log",
+        "mode": "a",
+        "encoding": "utf-8"
+    }
+},
+"loggers":
+{
+	"brew": {
+        "handlers": ["file_handler", "console"],
+	    "propagate": false
+    },
+    "brew.tests": {
+		"propagate": true
+    },
+	"brew.utils": {
+		"propagate": true
+    }
+},
+
+"root": {
+    "level": "DEBUG",
+    "handlers": ["file_handler"]
+    }
+}

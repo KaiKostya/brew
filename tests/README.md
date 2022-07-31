@@ -1,0 +1,1 @@
+Each test suite contains test classes that we can run separate manually or run all test module

@@ -1,0 +1,41 @@
+stages:
+  - testing # Running tests
+  - reports # Doubling allure reports to sqlite database
+  - deploy # Public report to gitlab pages
+
+docker_job:
+  stage: testing
+  tags:
+    - docker # Running docker container
+  image: python:3.8-alpine # python image
+  before_script:
+    - pip install -r requirements.txt # installing requirements
+  script:
+    - pytest --alluredir=./tests/allure_reports tests # Running tests. Reporting to allure_reports directory
+  allow_failure: true
+  artifacts:
+    when: always
+    paths:
+      - ./tests/allure_reports
+    expire_in: 1 day
+
+reporting_job:
+  stage: reports
+  tags:
+    - docker
+  image: python:3.8-alpine
+  before_script:
+    - pip install -r requirements.txt # installing requirements
+  script:
+     - python ./utils/db_management/sqlite_manager.py # Running python script for report results to sqlite database
+
+pages: # deploy reports to gitlab pages
+  stage: deploy
+  script:
+    - mkdir public # Creating folder public. Gitlab by default is hosting gitlab pages only from public
+    - mv ./tests/allure_reports/* public # Moving generated report to public
+  artifacts:
+    paths:
+      - public
+  rules:
+    - when: always
